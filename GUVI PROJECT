@@ -1,0 +1,119 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+public class Chatbox extends JFrame {
+    private JTextArea chatArea;
+    private JTextField inputField;
+    private JButton sendButton;
+    private ArrayList<String> userMessages; // List to store user messages
+
+    public Chatbox() {
+        // Initialize list to store user messages
+        userMessages = new ArrayList<>();
+
+        // Set up the frame
+        setTitle("Chatbox");
+        setSize(400, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // Chat area (where conversation will appear)
+        chatArea = new JTextArea();
+        chatArea.setEditable(false); // Disable editing
+        JScrollPane scrollPane = new JScrollPane(chatArea);
+        add(scrollPane, BorderLayout.CENTER);
+
+        // Input panel (for text input and send button)
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BorderLayout());
+        inputField = new JTextField();
+        sendButton = new JButton("Send");
+
+        // Add input field and send button to input panel
+        inputPanel.add(inputField, BorderLayout.CENTER);
+        inputPanel.add(sendButton, BorderLayout.EAST);
+        add(inputPanel, BorderLayout.SOUTH);
+
+        // Send button action
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendMessage();
+            }
+        });
+
+        // Enable sending message by pressing Enter
+        inputField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendMessage();
+            }
+        });
+    }
+
+    private void sendMessage() {
+        // Get the text from the input field
+        String message = inputField.getText().trim();
+
+        // If the message is not empty, add it to the chat area
+        if (!message.isEmpty()) {
+            // Store the message in the list
+            userMessages.add(message);
+
+            // Display the user's message in the chat area
+            chatArea.append("You: " + message + "\n");
+            inputField.setText(""); // Clear the input field
+
+            // Simulate a reply after sending the message
+            generateReply(message);
+        }
+    }
+
+    // Simulates a reply from the chatbox
+    private void generateReply(String userMessage) {
+        // Basic automated reply logic
+        String reply;
+
+        // Add more conditional responses
+        if (userMessage.contains("hello") || userMessage.contains("hi")) {
+            reply = "Hello! How can I assist you today?";
+        } else if (userMessage.contains("how are you")) {
+            reply = "I'm a chatbox, so I don't have feelings, but thanks for asking!";
+        } else if (userMessage.contains("bye") || userMessage.contains("goodbye")) {
+            reply = "Goodbye! Take care!";
+        } else if (userMessage.contains("your name")) {
+            reply = "I'm just a simple chatbox. You can call me ChatBot!";
+        } else if (userMessage.contains("time")) {
+            reply = "Sorry, I can't tell the time right now. But it's always a good time to chat!";
+        } else if (userMessage.contains("day")) {
+            reply = "I'm always available, no matter the day!";
+        } else if (userMessage.contains("weather")) {
+            reply = "I can't check the weather, but I hope it's nice wherever you are!";
+        } else if (userMessage.contains("joke")) {
+            reply = "Why don't scientists trust atoms? Because they make up everything!";
+        } else if (userMessage.contains("help")) {
+            reply = "Sure! I'm here to help. Just let me know what you need.";
+        } else {
+            reply = "I'm sorry, I don't understand that. Can you try something else?";
+        }
+
+        // Append the reply to the chat area
+        SwingUtilities.invokeLater(() -> {
+            chatArea.append("Bot: " + reply + "\n");
+        });
+    }
+
+    // Retrieve all messages sent by the user
+    public ArrayList<String> getUserMessages() {
+        return userMessages;
+    }
+
+    public static void main(String[] args) {
+        // Create and show the chatbox
+        Chatbox chatbox = new Chatbox();
+        chatbox.setVisible(true);
+    }
+}
